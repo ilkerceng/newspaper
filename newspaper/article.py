@@ -319,6 +319,12 @@ class Article(object):
         """
         return urls.valid_url(self.url)
 
+    def include_filter_url(self):
+        return urls.filter_url(self.config.include_filters)
+
+    def exclude_filter_url(self):
+        return urls.filter_url(self.config.exclude_filters)
+
     def is_valid_body(self):
         """If the article's body text is long enough to meet
         standard article requirements, keep the article

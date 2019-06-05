@@ -111,7 +111,8 @@ class Source(object):
         list-while-iterating-in-python
         """
         if reason == 'url':
-            articles[:] = [a for a in articles if a.is_valid_url()]
+            articles[:] = [a for a in articles if
+                           a.is_valid_url() and a.include_filter_url() and a.exclude_filter_url()]
         elif reason == 'body':
             articles[:] = [a for a in articles if a.is_valid_body()]
         return articles
@@ -193,7 +194,7 @@ class Source(object):
             else:
                 log.warning(('Deleting category %s from source %s due to '
                              'download error') %
-                             (self.categories[index].url, self.url))
+                            (self.categories[index].url, self.url))
         self.categories = [c for c in self.categories if c.html]
 
     def download_feeds(self):
@@ -210,7 +211,7 @@ class Source(object):
             else:
                 log.warning(('Deleting feed %s from source %s due to '
                              'download error') %
-                             (self.categories[index].url, self.url))
+                            (self.categories[index].url, self.url))
         self.feeds = [f for f in self.feeds if f.rss]
 
     def parse(self):
@@ -352,7 +353,7 @@ class Source(object):
         else:
             if threads > NUM_THREADS_PER_SOURCE_WARN_LIMIT:
                 log.warning(('Using %s+ threads on a single source '
-                            'may result in rate limiting!') % NUM_THREADS_PER_SOURCE_WARN_LIMIT)
+                             'may result in rate limiting!') % NUM_THREADS_PER_SOURCE_WARN_LIMIT)
             filled_requests = network.multithread_request(urls, self.config)
             # Note that the responses are returned in original order
             for index, req in enumerate(filled_requests):

@@ -17,7 +17,6 @@ from tldextract import tldextract
 
 log = logging.getLogger(__name__)
 
-
 MAX_FILE_MEMO = 20000
 
 _STRICT_DATE_REGEX_PREFIX = r'(?<=\W)'
@@ -292,13 +291,21 @@ def is_abs_url(url):
     this regex was brought to you by django!
     """
     regex = re.compile(
-        r'^(?:http|ftp)s?://'                                                                 # http:// or https://
+        r'^(?:http|ftp)s?://'  # http:// or https://
         r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
-        r'localhost|'                                                                         # localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|'                                                # ...or ipv4
-        r'\[?[A-F0-9]*:[A-F0-9:]+\]?)'                                                        # ...or ipv6
-        r'(?::\d+)?'                                                                          # optional port
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|'  # ...or ipv4
+        r'\[?[A-F0-9]*:[A-F0-9:]+\]?)'  # ...or ipv6
+        r'(?::\d+)?'  # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
     c_regex = re.compile(regex)
     return (c_regex.search(url) is not None)
+
+
+def filter_url(filter_table, include=False):
+    if type(filter_table) is dict:
+        for filter_location in ["in_netloc", "in_params", "in_params_anywhere"]:
+            print(filter_location)
+
+
